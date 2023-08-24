@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 # Set the API key
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def categorize_words(categories, search_words, question_template):
     results = {}
