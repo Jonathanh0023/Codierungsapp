@@ -1,3 +1,28 @@
+import streamlit as st
+import openai
+
+# Set the API key
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+def categorize_words(categories, search_words, question_template):
+    results = {}
+    category_string = ", ".join(categories)
+
+    for word in search_words:
+        question = question_template.format(word=word.strip())
+        prompt = f"{category_string}. {question}"
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+            max_tokens=50
+        )
+
+        results[word.strip()] = response.choices[0].message.content.strip()
+
+    return results
+    
 # Streamlit interface
 st.title("Kategorien Klassifikator")
 
