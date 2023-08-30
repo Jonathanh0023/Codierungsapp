@@ -8,11 +8,15 @@ api_key = st.text_input("Bitte gib deinen OpenAI-Key ein:", type='password')
 if api_key:
     openai.api_key = api_key
 
-def categorize_words(categories, search_words, question_template):
+def categorize_words(categories, search_words, question_template, progress_bar):
     results = {}
     category_string = ", ".join(categories)
 
-    for word in search_words:
+    for index, word in enumerate(search_words):
+        # Update the progress bar
+        progress_value = (index + 1) / len(search_words)
+        progress_bar.progress(progress_value)
+
         # Use the provided question template
         question = question_template.format(word=word.strip())
         prompt = f"{category_string}. {question}"
@@ -48,10 +52,16 @@ with col3:
 
 question_template = st.text_area("Aufgabe für die KI (Wichtig: Nur bei Bedarf verändern! {word} muss im Satz bleiben):", 'Zu welcher Kategorie oder welchen Kategorien gehören die Suchwörter? Antworte nur in Zahlen. {word}')
 
-# Button to trigger the categorization
 if st.button("Los gehts"):
     categories = [f"{num.strip()}: {name.strip()}" for num, name in zip(category_numbers.splitlines(), category_names.splitlines())]
-    results = categorize_words(categories, search_words.splitlines(), question_template)
+    
+    # Initialize the progress bar at 0
+    progress_bar = st.progress(0)
+
+    results = categorize_words(categories, search_words.splitlines(), question_template, progress_bar)
+
+    # Reset the progress bar (optional)
+    progress_bar.empty()
 
     st.subheader("Ergebnisse:")
     for word, category in results.items():
