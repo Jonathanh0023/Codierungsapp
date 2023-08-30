@@ -1,8 +1,12 @@
 import streamlit as st
 import openai
 
-# Set the API key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Text input for the API key
+api_key = st.text_input("Bitte gib deinen OpenAI-Key ein:", type='password')
+
+# Check if the API key is entered
+if api_key:
+    openai.api_key = api_key
 
 def categorize_words(categories, search_words, question_template):
     results = {}
@@ -52,3 +56,6 @@ if st.button("Los gehts"):
     st.subheader("Ergebnisse:")
     for word, category in results.items():
         st.write(f"**{word}**: {category}")
+
+else:
+    st.warning("Bitte gib deinen OpenAI-Key ein.")
