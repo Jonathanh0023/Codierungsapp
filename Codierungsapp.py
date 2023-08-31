@@ -41,7 +41,7 @@ def categorize_words(categories, search_words, question_template, progress_bar):
 st.title("BonsAI Codierungstool")
 
 # Creating Streamlit widgets to capture input using columns
-col1, col2, col3 = st.columns([0.5, 3, 3])
+col1, col2, col3 = st.columns([0.8, 3, 3])
 
 with col1:
     category_numbers = st.text_area("Codes:", placeholder="1\n2\n3", height=600)
