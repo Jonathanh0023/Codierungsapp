@@ -44,11 +44,11 @@ st.title("BonsAI Codierungstool")
 col1, col2, col3 = st.columns([0.8, 3, 3])
 
 with col1:
-    category_numbers = st.text_area("Codes:", placeholder="1\n2\n3", height=400)
+    category_numbers = st.text_area("Codes:", placeholder="1\n2\n3\n...\n...\n...", height=400)
 with col2:
-    category_names = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3', height=400)
+    category_names = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3\n...\n...\n...', height=400)
 with col3:
-    search_words = st.text_area("Suchwörter:", placeholder='Offene Nennungen untereinander einfügen\n...\n...\n...', height=400)
+    search_words = st.text_area("Suchwörter:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
 question_template = st.text_area("Aufgabe für die KI (Wichtig: Nur bei Bedarf verändern! {word} muss im Satz bleiben):", 'Zu welcher Kategorie oder welchen Kategorien gehören die Suchwörter? Antworte nur in Zahlen. {word}')
 
