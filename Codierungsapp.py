@@ -17,7 +17,7 @@ if api_key:
 def completion_with_backoff(**kwargs):
     return openai.ChatCompletion.create(**kwargs)
 
-def categorize_words(categories, search_words, question_template, progress_bar):
+def categorize_words(categories, search_words, question_template, progress_bar, selected_model):
     results = {}
     category_string = ", ".join(categories)
 
@@ -31,7 +31,7 @@ def categorize_words(categories, search_words, question_template, progress_bar):
         prompt = f"{category_string}. {question}"
 
         response = completion_with_backoff(
-            model="gpt-4",
+            model=selected_model,
             messages=[
                 {
                     "role": "user",
@@ -48,6 +48,9 @@ def categorize_words(categories, search_words, question_template, progress_bar):
     return results
 
 st.title("BonsAI Codierungstool")
+
+model_choices = ["gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"]
+selected_model = st.selectbox("Choose a model:", model_choices, index=0)
 
 # Creating Streamlit widgets to capture input using columns
 col1, col2, col3 = st.columns([0.8, 3, 3])
@@ -67,7 +70,7 @@ if st.button("Los gehts"):
     # Initialize the progress bar at 0
     progress_bar = st.progress(0)
 
-    results = categorize_words(categories, search_words.splitlines(), question_template, progress_bar)
+    results = categorize_words(categories, search_words.splitlines(), question_template, progress_bar, selected_model)
 
     # Reset the progress bar (optional)
     progress_bar.empty()
