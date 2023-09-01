@@ -50,7 +50,7 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
 st.title("BonsAI Codierungstool")
 
 model_choices = ["gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"]
-selected_model = st.selectbox("Choose a model:", model_choices, index=0)
+selected_model = st.selectbox("Wähle ein Model (https://platform.openai.com/docs/models/overview):", model_choices, index=0)
 
 # Creating Streamlit widgets to capture input using columns
 col1, col2, col3 = st.columns([0.8, 3, 3])
