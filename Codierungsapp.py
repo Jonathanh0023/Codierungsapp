@@ -56,9 +56,9 @@ selected_model = st.selectbox("Wähle ein Model (https://platform.openai.com/doc
 col1, col2, col3 = st.columns([0.8, 3, 3])
 
 with col1:
-    category_numbers = st.text_area("Codes:", placeholder="1\n2\n3\n...\n...\n...", height=400)
+    category_numbers = st.text_area("Codes:", placeholder="1\n2\n3\n...", height=400)
 with col2:
-    category_names = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3\n...\n...\n...', height=400)
+    category_names = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3\n...', height=400)
 with col3:
     search_words = st.text_area("Suchwörter:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
