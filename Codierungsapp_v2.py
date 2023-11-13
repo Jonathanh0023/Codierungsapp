@@ -51,6 +51,27 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
 
     return results
 
+# Set page title and favicon.
+st.set_page_config(page_title="BonsAI", page_icon="https://sw01.rogsurvey.de/data/bonsai/Kara_23_19/logo_Bonsa_BONSAI_neu.png", layout="centered")
+
+# Define the CSS to inject.
+background_image_url = "https://r4.wallpaperflare.com/wallpaper/902/658/531/tree-bonsai-tree-black-hd-bonsai-tree-wallpaper-78062c2abf5c5769eec0e982d2691b30.jpg"
+background_style = f"""
+<style>
+.stApp {{
+    background-image: url("{background_image_url}");
+    background-size: cover;
+    background-position: 500px -65px;
+    background-repeat: no-repeat;
+}}
+.main {{
+    margin-top: -90px;  /* Adjust this value as needed */
+}}
+</style>
+"""
+
+# Inject the CSS with markdown.
+st.markdown(background_style, unsafe_allow_html=True)
 
 st.title("BonsAI Codierungstool")
 
