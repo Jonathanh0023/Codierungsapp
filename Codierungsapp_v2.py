@@ -68,7 +68,7 @@ with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
 system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist ein hilfreicher Assistent bei der Auswertung von offenen Nennungen in der Marktforschung.')
-question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):", 'Zu welcher Kategorie oder welchen Kategorien gehört die offene Nennung? Du antwortest immer mit den entsprechenden Codes und nur in Zahlen. {word}')
+question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):", 'Zu welcher Kategorie oder welchen Kategorien gehört die offene Nennung? "{word}". Du antwortest immer mit den entsprechenden Codes und nur in Zahlen.')
 
 
 
