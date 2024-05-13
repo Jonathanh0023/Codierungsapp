@@ -41,16 +41,16 @@ def completion_with_backoff(**kwargs):
 
 def categorize_words(categories, search_words, question_template, progress_bar, selected_model, system_message):
     results = {}
-    category_string = ", ".join(categories)
+    category_string = ", ".join(categories)  # Kategorien als String
 
     for index, word in enumerate(search_words):
-        # Update the progress bar
         progress_value = (index + 1) / len(search_words)
         progress_bar.progress(progress_value)
 
-        # Use the provided question template
-        question = question_template.format(word=word.strip())
-        prompt = f"{category_string}. {question}"
+        # Ersetze die Platzhalter in deinem Template mit den tatsächlichen Daten
+        question = question_template.replace("{{KATEGORIEN}}", category_string).replace("{{word}}", word.strip())
+
+        prompt = f"{category_string}. {question}"  # Anpassung, wenn nötig
 
         response = completion_with_backoff(
             model=selected_model,
@@ -68,7 +68,6 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
             max_tokens=50,
         )
 
-        # Assuming the response directly contains the category integer
         results[word.strip()] = response.choices[0].message.content.strip()
 
     return results
