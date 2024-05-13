@@ -94,12 +94,12 @@ question_template = st.text_area("Hier die Aufgabe für die KI einstellen:",
 """Hier ist die Liste der Kategorien und ihrer entsprechenden numerischen Codes:
 
 <Kategorien>
-{{KATEGORIEN}}
+{KATEGORIEN}
 </Kategorien>
 
 Hier ist die zu kategorisierende offene Nennung: 
 <Nennung>
-{{word}}
+{word}
 </Nennung>
 
 Denke sorgfältig darüber nach, zu welcher Kategorie oder welchen Kategorien die Nennung am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung. 
