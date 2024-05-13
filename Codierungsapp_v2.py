@@ -6,10 +6,10 @@ from tenacity import (
     wait_random_exponential,
 )
 
-# Set page title and favicon.
+# Set page title and favicon
 st.set_page_config(page_title="BonsAI", page_icon="https://sw01.rogsurvey.de/data/bonsai/Kara_23_19/logo_Bonsa_BONSAI_neu.png", layout="centered")
 
-    # Define the CSS to inject.
+# Define the CSS to inject for background image
 background_image_url = "https://r4.wallpaperflare.com/wallpaper/902/658/531/tree-bonsai-tree-black-hd-bonsai-tree-wallpaper-78062c2abf5c5769eec0e982d2691b30.jpg"
 background_style = f"""
     <style>
@@ -25,7 +25,7 @@ background_style = f"""
     </style>
     """    
 
-# Inject the CSS with markdown.
+# Inject the CSS with markdown
 st.markdown(background_style, unsafe_allow_html=True)
 
 # Text input for the API key
@@ -41,16 +41,16 @@ def completion_with_backoff(**kwargs):
 
 def categorize_words(categories, search_words, question_template, progress_bar, selected_model, system_message):
     results = {}
-    category_string = ", ".join(categories)  # Kategorien als String
+    category_string = ", ".join(categories)
 
     for index, word in enumerate(search_words):
+        # Update the progress bar
         progress_value = (index + 1) / len(search_words)
         progress_bar.progress(progress_value)
 
-        # Ersetze die Platzhalter in deinem Template mit den tatsächlichen Daten
-        question = question_template.replace("{{KATEGORIEN}}", category_string).replace("{{word}}", word.strip())
-
-        prompt = f"{category_string}. {question}"  # Anpassung, wenn nötig
+        # Use the provided question template
+        question = question_template.format(word=word.strip())
+        prompt = f"{category_string}. {question}"
 
         response = completion_with_backoff(
             model=selected_model,
@@ -68,15 +68,15 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
             max_tokens=50,
         )
 
+        # Assuming the response directly contains the category integer
         results[word.strip()] = response.choices[0].message.content.strip()
 
     return results
 
-
 st.title("BonsAI Codierungstool")
 
 model_choices = ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-0125"]
-selected_model = st.selectbox("Wähle ein Model (https://platform.openai.com/docs/models/overview):", model_choices, index=0)
+selected_model = st.selectbox("Wähle ein Model:", model_choices, index=0)
 
 # Creating Streamlit widgets to capture input using columns
 col1, col2, col3 = st.columns([0.8, 3, 3])
@@ -92,26 +92,19 @@ system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt wer
 question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
 """Hier ist die Liste der Kategorien und ihrer entsprechenden numerischen Codes:
 
-<Kategorien>
 {{KATEGORIEN}}
-</Kategorien>
 
 Hier ist die zu kategorisierende offene Nennung: 
-<Nennung>
 {{word}}
-</Nennung>
 
 Denke sorgfältig darüber nach, zu welcher Kategorie oder welchen Kategorien die Nennung am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung. 
 
 Gehe für jede Kategorie wie folgt vor:
-<Scratchpad>
 Frage dich: Passt <Kategorie> zur <Nennung>? 
 Wenn die Antwort 'ja' ist, dann vergib den entsprechenden Code für diese Kategorie.
 Wenn die Antwort 'nein' ist, dann vergib keinen Code für diese Kategorie.
-</Scratchpad>
 
 Gib deine finale Einschätzung, zu welcher Kategorie oder welchen Kategorien die Nennung gehört, in <Antwort> Tags an. Antworte dabei nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.""")
-
 
 if st.button("Los gehts"):
     categories = [f"{num.strip()}: {name.strip()}" for num, name in zip(category_numbers.splitlines(), category_names.splitlines())]
