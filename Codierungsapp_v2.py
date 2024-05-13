@@ -76,7 +76,7 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
 
 st.title("BonsAI Codierungstool")
 
-model_choices = ["gpt-4-turbo-2024-04-09", "gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-0125"]
+model_choices = ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-0125"]
 selected_model = st.selectbox("Wähle ein Model (https://platform.openai.com/docs/models/overview):", model_choices, index=0)
 
 # Creating Streamlit widgets to capture input using columns
@@ -89,8 +89,15 @@ with col2:
 with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
-system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist ein hilfreicher Assistent bei der Auswertung von offenen Nennungen in der Marktforschung.')
-question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):", 'Zu welcher Kategorie oder welchen Kategorien gehört die offene Nennung? "{word}". Du antwortest immer mit den entsprechenden Codes und nur in Zahlen.')
+system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du wirst als hilfreicher Assistent bei der Auswertung von offenen Nennungen in der Marktforschung agieren. Deine Aufgabe ist es zu bestimmen, zu welcher Kategorie oder welchen Kategorien eine offene Nennung gehört.')
+question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):", 'Hier ist die zu kategorisierende offene Nennung:
+<Nennung>
+{word}
+</Nennung>
+
+Denke  darüber nach, zu welcher Kategorie oder welchen Kategorien die Nennung am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung.
+
+Gib dann in <Antwort> Tags deine finale Einschätzung, zu welcher Kategorie oder welchen Kategorien die Nennung gehört. Antworte dabei nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.')
 
 
 
