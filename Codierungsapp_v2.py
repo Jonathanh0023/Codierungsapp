@@ -41,16 +41,15 @@ def completion_with_backoff(**kwargs):
 
 def categorize_words(categories, search_words, question_template, progress_bar, selected_model, system_message):
     results = {}
-    category_string = ", ".join(categories)
+    category_string = "\n".join(categories)  # Verwende Zeilenumbrüche anstelle von Kommas
 
     for index, word in enumerate(search_words):
         # Update the progress bar
         progress_value = (index + 1) / len(search_words)
         progress_bar.progress(progress_value)
 
-        # Use the provided question template
-        question = question_template.format(word=word.strip())
-        prompt = f"{category_string}. {question}"
+        # Use the provided question template and replace {KATEGORIEN} with the actual categories
+        question = question_template.format(KATEGORIEN=category_string, word=word.strip())
 
         response = completion_with_backoff(
             model=selected_model,
@@ -61,7 +60,7 @@ def categorize_words(categories, search_words, question_template, progress_bar, 
                 },
                 {
                     "role": "user",
-                    "content": prompt
+                    "content": question
                 }
             ],
             temperature=0.2,
