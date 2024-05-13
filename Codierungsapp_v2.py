@@ -90,14 +90,16 @@ with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
 system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du wirst als hilfreicher Assistent bei der Auswertung von offenen Nennungen in der Marktforschung agieren. Deine Aufgabe ist es zu bestimmen, zu welcher Kategorie oder welchen Kategorien eine offene Nennung gehört.')
-question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):", 'Hier ist die zu kategorisierende offene Nennung:
-<Nennung>
-{word}
-</Nennung>
-
-Denke  darüber nach, zu welcher Kategorie oder welchen Kategorien die Nennung am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung.
-
-Gib dann in <Antwort> Tags deine finale Einschätzung, zu welcher Kategorie oder welchen Kategorien die Nennung gehört. Antworte dabei nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.')
+question_template = st.text_area("Hier die Aufgabe für die KI einstellen (Wichtig: {word} muss im Satz bleiben.):"
+    "\\nHier ist die zu kategorisierende offene Nennung:"
+    "\\n<Nennung>"
+    "\\n{word}"
+    "\\n</Nennung>"
+    "\\n\\nDenke darüber nach, zu welcher Kategorie oder welchen Kategorien die Nennung am besten passt. "
+    "Berücksichtige dabei den Inhalt und Kontext der Nennung."
+    "\\n\\nGib dann in <Antwort> Tags deine finale Einschätzung, zu welcher Kategorie oder welchen Kategorien die Nennung gehört. "
+    "Antworte dabei nur mit den entsprechenden numerischen Codes der Kategorien. "
+    "Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.")
 
 
 
