@@ -38,8 +38,27 @@ api_key = st.sidebar.text_input("Bitte gib deinen OpenAI-Key ein:", type='passwo
 model_choices = ["gpt-3.5-turbo", "gpt-4o", "gpt-4-turbo", "gpt-4"]
 selected_model = st.sidebar.selectbox("Wähle ein Model:", model_choices, index=0)
 
-# Add a link to the OpenAI models documentation in the sidebar
-st.sidebar.markdown("[Mehr Informationen zu den Modellen und Kosten](https://platform.openai.com/docs/models)")
+# Add the instructions to the sidebar
+st.sidebar.markdown("""
+## Anleitung zur Nutzung der BonsAI-App
+
+### So geht's
+
+1. **API-Schlüssel eingeben**: Gib deinen OpenAI-API-Schlüssel in der Seitenleiste ein.
+2. **Modell auswählen**: Wähle ein Modell aus. [Mehr Infos zu den Modellen und Kosten](https://platform.openai.com/docs/models)
+3. **Daten eingeben**: Trage deine Codes, Kategorien und offenen Nennungen ein.
+4. **Optionen anpassen**: Passe bei Bedarf die Beispiele, die Systemnachricht und die Aufgabe für die KI an.
+5. **Starten**: Klicke auf "Los gehts", um die Kategorisierung zu starten.
+6. **Ergebnisse ansehen**: Verfolge den Fortschritt und sieh dir die Ergebnisse direkt in der App an.
+
+### Erklärung der geschweiften Klammern `{}` im Prompt
+Die geschweiften Klammern `{}` im Prompt sind Platzhalter, die durch die tatsächlichen Werte ersetzt werden, bevor der Prompt an die KI gesendet wird. Hier sind die Platzhalter und was sie bedeuten:
+
+- `{CODES_AND_CATEGORIES}`: Wird durch die Liste der Codes und Kategorien ersetzt.
+- `{word}`: Wird durch die aktuelle Nennung ersetzt, die kategorisiert werden soll.
+- `{first_category}` und `{second_category}`: Werden durch die ersten beiden Kategorien aus der Liste ersetzt.
+- `{examples}`: Wird durch die eingegebenen Beispiele ersetzt.
+""")
 
 # Check if the API key is entered
 if api_key:
@@ -92,7 +111,7 @@ with col2:
 with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
-beispiele = st.text_area("Beispiele:", placeholder='Hier können Beispiele eingefügt werden', height=100)
+beispiele = st.text_area("Beispiele:", placeholder='Beispiele von Nennungen mit Codes', height=100)
 
 system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist Experte in Multi-label Klassifizierungen von Nennungen. Du antwortest nur mit den entsprechenden Codes.')
 question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
