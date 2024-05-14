@@ -92,6 +92,8 @@ with col2:
 with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
+beispiele = st.text_area("Beispiele:", placeholder='Beispiele von Nennungen mit Codes', height=200)
+
 system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist Experte in Multi-label Klassifizierungen von Nennungen. Du antwortest nur mit den entsprechenden Codes.')
 question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
 """{CODES_AND_CATEGORIES}
@@ -106,7 +108,10 @@ Frage dich: Passt die Nennung '{word}' zur Kategorie 1 '{first_category}', passt
 Wenn die Antwort 'ja' ist, dann vergib den entsprechenden Code für diese Kategorie.
 Wenn die Antwort 'nein' ist, dann vergib keinen Code für diese Kategorie.
     
-Antworte nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.""", height=400)
+Antworte nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.
+
+Hier sind einige Beispiele:
+{examples}""", height=200)
 
 if st.button("Los gehts"):
     codes_list = codes.splitlines()
@@ -127,7 +132,8 @@ if st.button("Los gehts"):
             CODES_AND_CATEGORIES=codes_and_categories,
             word=word.strip(),
             first_category=categories_list[0],
-            second_category=categories_list[1]
+            second_category=categories_list[1],
+            examples=beispiele  
         )
         messages = [
             {"role": "system", "content": system_message},
