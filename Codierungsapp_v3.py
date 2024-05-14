@@ -92,7 +92,7 @@ with col2:
 with col3:
     search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
-beispiele = st.text_area("Beispiele:", placeholder='Beispiele von Nennungen mit Codes', height=200)
+beispiele = st.text_area("Beispiele:", placeholder='Hier können Beispiele eingefügt werden', height=100)
 
 system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist Experte in Multi-label Klassifizierungen von Nennungen. Du antwortest nur mit den entsprechenden Codes.')
 question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
