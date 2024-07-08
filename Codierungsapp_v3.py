@@ -9,25 +9,6 @@ from tenacity import (
 # Set page title and favicon
 st.set_page_config(page_title="BonsAI", page_icon="https://sw01.rogsurvey.de/data/bonsai/Kara_23_19/logo_Bonsa_BONSAI_neu.png", layout="centered")
 
-# Define the CSS to inject for background image
-background_image_url = "https://r4.wallpaperflare.com/wallpaper/902/658/531/tree-bonsai-tree-black-hd-bonsai-tree-wallpaper-78062c2abf5c5769eec0e982d2691b30.jpg"
-background_style = f"""
-    <style>
-    .stApp {{
-        background-image: url("{background_image_url}");
-        background-size: cover;
-        background-position: 500px -65px;
-        background-repeat: no-repeat;
-    }}
-    .main {{
-        margin-top: -60px;  /* Adjust this value as needed */
-    }}
-    </style>
-    """    
-
-# Inject the CSS with markdown
-st.markdown(background_style, unsafe_allow_html=True)
-
 # Add a sidebar for navigation
 st.sidebar.title("Navigation")
 
@@ -48,7 +29,7 @@ Bei simplen Codierungen bitte **gpt-3.5-turbo** als Model auswählen, um Kosten 
 1. **API-Schlüssel eingeben**: Gib deinen OpenAI-API-Schlüssel in der Seitenleiste ein.
 2. **Modell auswählen**: Wähle ein Modell aus. [Mehr Infos zu den Modellen und Kosten](https://platform.openai.com/docs/models)
 3. **Daten eingeben**: Trage deine Codes, Kategorien und offenen Nennungen ein.
-4. **Optionen anpassen**: Passe bei Bedarf die Beispiele, die Systemnachricht und die Aufgabe für die KI an.
+4. **Prompt anpassen**: Passe bei Bedarf die Beispiele, die Systemnachricht und die Aufgabe für die KI an.
 5. **Starten**: Klicke auf "Los gehts", um die Kategorisierung zu starten.
 6. **Ergebnisse ansehen**: Verfolge den Fortschritt und sieh dir die Ergebnisse direkt in der App an.
 
@@ -102,80 +83,114 @@ def categorize_words(codes, categories, search_words, question_template, progres
 
 st.title("BonsAI Codierungstool")
 
-# Creating Streamlit widgets to capture input using columns
-col1, col2, col3 = st.columns([0.8, 3, 3])
+# Check if the instructions have been read
+if "instructions_read" not in st.session_state:
+    st.session_state.instructions_read = False
 
-with col1:
-    codes = st.text_area("Codes:", placeholder="1\n2\n3\n...", height=400)
-with col2:
-    categories = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3\n...', height=400)
-with col3:
-    search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
+# Function to show the instructions popup
+def show_instructions():
+    st.write("## Bitte lies die Anleitung vor Nutzung der App sorgfältig durch")
+    st.markdown("""
+        1. **API-Schlüssel eingeben**: Gib deinen OpenAI-API-Schlüssel in der Seitenleiste ein.
+        2. **Modell auswählen**: Wähle ein Modell aus. [Mehr Infos zu den Modellen und Kosten](https://platform.openai.com/docs/models)
+        3. **Daten eingeben**: Trage deine Codes, Kategorien und offenen Nennungen ein.
+        4. **Prompt anpassen**: Passe bei Bedarf die :red[**Beispiele**], die Systemnachricht und die Aufgabe für die KI an. :red[**Dies ist entscheidend für die Qualität der Codierung**.]
+        5. **Starten**: Klicke auf "Los gehts", um die Kategorisierung zu starten.
+        6. **Ergebnisse ansehen**: Verfolge den Fortschritt und sieh dir die Ergebnisse direkt in der App an.
+        """)
+    st.markdown("""
+        ### Erklärung der geschweiften Klammern `{}` im Prompt
+        Die geschweiften Klammern `{}` im Prompt sind Platzhalter, die durch die tatsächlichen Werte ersetzt werden, bevor der Prompt an die KI gesendet wird. Hier sind die Platzhalter und was sie bedeuten:
 
-beispiele = st.text_area("Beispiele:", placeholder='Beispiele von Nennungen mit Codes', height=100)
+        - `{CODES_AND_CATEGORIES}`: Wird durch die Liste der Codes und Kategorien ersetzt.
+        - `{word}`: Wird durch die aktuelle Nennung ersetzt, die kategorisiert werden soll.
+        - `{first_category}` und `{second_category}`: Werden durch die ersten beiden Kategorien aus der Liste ersetzt.
+        - `{examples}`: Wird durch die eingegebenen Beispiele ersetzt.
+        """)
+    if st.checkbox("Ich habe die Anleitung gelesen und verstanden."):
+        st.session_state.instructions_read = True
+        st.experimental_rerun()
 
-system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist Experte in Multi-label Klassifizierungen von Nennungen. Du antwortest nur mit den entsprechenden Codes.')
-question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
-"""{CODES_AND_CATEGORIES}
-    
-Hier ist die zu kategorisierende offene Nennung: 
-{word}
-    
-Denke sorgfältig darüber nach, zu welchen Kategorien die Nennung '{word}' am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung. 
-    
-Gehe für jede Kategorie wie folgt in einem Loop vor:
-Frage dich: Passt die Nennung '{word}' zur Kategorie 1 '{first_category}', passt die Nennung zur Kategorie 2 '{second_category}', usw ... ? 
-Wenn die Antwort 'ja' ist, dann vergib den entsprechenden Code für diese Kategorie.
-Wenn die Antwort 'nein' ist, dann vergib keinen Code für diese Kategorie.
-    
-Antworte nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.
+# Show the instructions popup if not read
+if not st.session_state.instructions_read:
+    show_instructions()
+else:
+    # Main app content
+    # Creating Streamlit widgets to capture input using columns
+    col1, col2, col3 = st.columns([0.8, 3, 3])
 
-Hier sind einige Beispiele:
-{examples}""", height=200)
+    with col1:
+        codes = st.text_area("Codes:", placeholder="1\n2\n3\n...", height=400)
+    with col2:
+        categories = st.text_area("Kategorien:", placeholder='Kategorie für Code 1\nKategorie für Code 2\nKategorie für Code 3\n...', height=400)
+    with col3:
+        search_words = st.text_area("Offene Nennungen:", placeholder='Offene Nennungen untereinander einfügen', height=400)
 
-if st.button("Los gehts"):
-    codes_list = codes.splitlines()
-    categories_list = categories.splitlines()
-    code_category_pairs = zip(codes_list, categories_list)
-    formatted_code_categories = [f"{code} {category}" for code, category in code_category_pairs]
-    codes_and_categories = "\n".join(formatted_code_categories)
-    progress_bar = st.progress(0)
-    placeholder = st.empty()  # Create a placeholder to display streamed responses
+    beispiele = st.text_area("Beispiele:", placeholder='Beispiele von Nennungen mit Codes', height=100)
 
-    all_responses = ""  # Initialize an empty string to accumulate responses
+    system_message = st.text_area("Systemnachricht (Hier kann die KI eingestellt werden):", 'Du bist Experte in Multi-label Klassifizierungen von Nennungen. Du antwortest nur mit den entsprechenden Codes.')
+    question_template = st.text_area("Hier die Aufgabe für die KI einstellen:", 
+    """{CODES_AND_CATEGORIES}
+        
+    Hier ist die zu kategorisierende offene Nennung: 
+    {word}
+        
+    Denke sorgfältig darüber nach, zu welchen Kategorien die Nennung '{word}' am besten passt. Berücksichtige dabei den Inhalt und Kontext der Nennung. 
+        
+    Gehe für jede Kategorie wie folgt in einem Loop vor:
+    Frage dich: Passt die Nennung '{word}' zur Kategorie 1 '{first_category}', passt die Nennung zur Kategorie 2 '{second_category}', usw ... ? 
+    Wenn die Antwort 'ja' ist, dann vergib den entsprechenden Code für diese Kategorie.
+    Wenn die Antwort 'nein' ist, dann vergib keinen Code für diese Kategorie.
+        
+    Antworte nur mit den entsprechenden numerischen Codes der Kategorien. Wenn die Nennung zu mehreren Kategorien passt, liste alle zutreffenden Codes auf, getrennt durch Kommas.
 
-    for index, word in enumerate(search_words.splitlines()):
-        progress_value = (index + 1) / len(search_words.splitlines())
-        progress_bar.progress(progress_value)
+    Hier sind einige Beispiele:
+    {examples}""", height=200)
 
-        question = question_template.format(
-            CODES_AND_CATEGORIES=codes_and_categories,
-            word=word.strip(),
-            first_category=categories_list[0],
-            second_category=categories_list[1],
-            examples=beispiele  
-        )
-        messages = [
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": question}
-        ]
-        print("Messages sent to OpenAI API:", messages)  # Add this line to print the messages
-        stream = openai.chat.completions.create(
-            model=selected_model,
-            messages=messages,
-            temperature=0.2,
-            max_tokens=50,
-            stream=True
-        )
+    if st.button("Los gehts"):
+        codes_list = codes.splitlines()
+        categories_list = categories.splitlines()
+        code_category_pairs = zip(codes_list, categories_list)
+        formatted_code_categories = [f"{code} {category}" for code, category in code_category_pairs]
+        codes_and_categories = "\n".join(formatted_code_categories)
+        progress_bar = st.progress(0)
+        placeholder = st.empty()  # Create a placeholder to display streamed responses
 
-        # Accumulate the complete response for the current word
-        complete_response = ""
-        for chunk in stream:
-            if chunk.choices[0].delta.content:
-                complete_response += chunk.choices[0].delta.content
+        all_responses = ""  # Initialize an empty string to accumulate responses
 
-        # Append the formatted response to all_responses
-        all_responses += f"**{word}**: {complete_response.strip()}\n\n"
-        placeholder.markdown(all_responses)  # Update the placeholder with all accumulated responses
+        for index, word in enumerate(search_words.splitlines()):
+            progress_value = (index + 1) / len(search_words.splitlines())
+            progress_bar.progress(progress_value)
 
-    progress_bar.empty()
+            question = question_template.format(
+                CODES_AND_CATEGORIES=codes_and_categories,
+                word=word.strip(),
+                first_category=categories_list[0],
+                second_category=categories_list[1],
+                examples=beispiele  
+            )
+            messages = [
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": question}
+            ]
+            print("Messages sent to OpenAI API:", messages)  # Add this line to print the messages
+            stream = openai.chat.completions.create(
+                model=selected_model,
+                messages=messages,
+                temperature=0.2,
+                max_tokens=50,
+                stream=True
+            )
+
+            # Accumulate the complete response for the current word
+            complete_response = ""
+            for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    complete_response += chunk.choices[0].delta.content
+
+            # Append the formatted response to all_responses
+            all_responses += f"**{word}**: {complete_response.strip()}\n\n"
+            placeholder.markdown(all_responses)  # Update the placeholder with all accumulated responses
+
+        progress_bar.empty()
+ 
