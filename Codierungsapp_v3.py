@@ -109,7 +109,7 @@ def show_instructions():
         """)
     if st.checkbox("Ich habe die Anleitung gelesen und verstanden."):
         st.session_state.instructions_read = True
-        st.experimental_rerun()
+        st.rerun()
 
 # Show the instructions popup if not read
 if not st.session_state.instructions_read:
