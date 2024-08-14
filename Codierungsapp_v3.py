@@ -16,7 +16,7 @@ st.sidebar.title("Navigation")
 api_key = st.sidebar.text_input("Bitte gib deinen OpenAI-Key ein:", type='password')
 
 # Move model selection to the sidebar
-model_choices = ["gpt-4o", "gpt-3.5-turbo"]
+model_choices = ["gpt-4o-mini", "gpt-4o"]
 selected_model = st.sidebar.selectbox("Wähle ein Model:", model_choices, index=0)
 
 # Add the instructions to the sidebar
