@@ -21,7 +21,7 @@ selected_model = st.sidebar.selectbox("Wähle ein Model:", model_choices, index=
 
 # Add the instructions to the sidebar
 st.sidebar.markdown("""
-Bei simplen Codierungen bitte **gpt-3.5-turbo** als Model auswählen, um Kosten zu sparen.
+Bei simplen Codierungen bitte **gpt-4o-mini** als Model auswählen, um Kosten zu sparen.
 ## Anleitung zur Nutzung der BonsAI-App
 
 ### So geht's
