@@ -1,0 +1,15 @@
+{
+  "selected_app": "BonsAI Codierungstool",
+  "codes_input": "1",
+  "categories_input": "hi",
+  "search_words_input": "",
+  "study_context_input": "",
+  "beispiele_input": "",
+  "selected_task_template": "Multi-Label (Die KI kann mehrere Codes pro Nennung vergeben)",
+  "instructions_read": true,
+  "api_key": "",
+  "system_message": "Du bist ein Experte für die Klassifizierung von Texten. Deine Aufgabe ist es, Nennungen den passenden Kategorien zuzuordnen. Antworte ausschließlich mit den entsprechenden Codes.",
+  "question_template": "{CODES_AND_CATEGORIES}\n\n            {context_section}\n            \n            Zu kategorisierende Nennung: {word}\n            \n            1. Lies die Nennung sorgfältig im Studienkontext\n            2. Vergleiche sie mit jeder Kategorie:\n               - Kategorie 1 '{first_category}'\n               - Kategorie 2 '{second_category}'\n               - ...\n            3. Prüfe auf direkte und indirekte Übereinstimmungen\n            4. Vergib alle zutreffenden Codes\n            \n            Antworte ausschließlich mit den Codes (durch Kommas getrennt).\n            \n            Beispiele zur Orientierung:\n            {examples}",
+  "codeplan_expander_open": false,
+  "session_start_time": 1730731936.5258203
+}

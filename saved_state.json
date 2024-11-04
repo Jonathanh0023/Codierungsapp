@@ -1,0 +1,13 @@
+{
+  "codes_input": "",
+  "categories_input": "dfg",
+  "search_words_input": "",
+  "study_context_input": "",
+  "beispiele_input": "",
+  "selected_task_template": null,
+  "instructions_read": true,
+  "api_key": "",
+  "system_message": "Du bist ein Experte für die Klassifizierung von Texten. Deine Aufgabe ist es, Nennungen den passenden Kategorien zuzuordnen. Antworte ausschließlich mit den entsprechenden Codes.",
+  "question_template": "",
+  "codeplan_expander_open": false
+}
