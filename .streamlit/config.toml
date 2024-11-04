@@ -1,0 +1,25 @@
+[theme]
+base="light"
+primaryColor="#e5007f"
+backgroundColor="#fffafa"
+secondaryBackgroundColor="#e5f3f3"
+textColor="#000000"
+font="Ucity"
+
+[client]
+# Increase text size in text areas
+toolbarMode = "minimal"
+
+[runner]
+# Cleaner error messages
+fastRerenderLimit = 0
+
+[server]
+# Better text rendering
+enableXsrfProtection = false
+enableCORS = false
+
+[browser]
+# Smoother scrolling in text areas
+gatherUsageStats = false 
+
