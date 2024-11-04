@@ -1,7 +1,11 @@
 streamlit
-streamlit-authenticator>=0.7.0
+streamlit-authenticator
 openai
 tenacity
 fuzzywuzzy
 pandas
 xlsxwriter
+python-Levenshtein
+openpyxl
+python-dotenv
+uuid
